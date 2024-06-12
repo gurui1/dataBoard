@@ -1,0 +1,57 @@
+{
+    "menu": [
+        {
+            "title": "数据看板",
+            "index": "dataBoard|数据看板",
+            "icon": "Menu"
+        },
+        {
+            "title": "期初余额表",
+            "index": "biao1|期初余额表",
+            "icon": "Document"
+        },
+        {
+            "title": "预计期末余额表",
+            "index": "biao2|预计期末余额表",
+            "icon": "Document"
+        },
+      
+        {
+            "title": "预计支出表",
+            "index": "biao3|预计支出表",
+            "icon": "Document"
+        },
+        {
+            "title": "预计回款表",
+            "index": "biao4|预计回款表",
+            "icon": "Document"
+        },         
+        {
+            "title": "实际支出表",
+            "index": "biao5|实际支出表",
+            "icon": "Document"
+        },
+        {
+            "title": "实际回款表",
+            "index": "biao6|实际回款表",
+            "icon": "Document"
+        },
+        {
+            "title": "系统外预计收支表",
+            "index": "biao7|系统外预计收支表",
+            "icon": "Document"
+        }
+    ],
+    "urlParse":{
+        "dataBoard":"dataBoard|数据看板",
+        "biao1":"biao1|期初余额表",
+        "biao2":"biao2|预计期末余额表",
+        "biao3":"biao3|预计支出表",
+        "biao4":"biao4|预计回款表",
+        "biao5":"biao5|实际支出表",
+        "biao6":"biao6|实际回款表",
+        "biao7":"biao7|系统外预计收支表"
+
+    
+    }
+}
