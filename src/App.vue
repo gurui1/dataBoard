@@ -30,7 +30,28 @@ const handleSelect = (key: string) => {
   }
   router.replace("/" + key.split("|")[0]);
 };
+// 获取时间 
 
+let date = new Date();
+// console.log(Date());
+
+
+// 获取年、月、日、小时、分钟、秒
+let year = date.getFullYear();
+let month = (date.getMonth() + 1).toString().padStart(2, "0"); // 月份从0开始，需要加1
+let day = date.getDate().toString().padStart(2, "0");
+// let hour = date.getHours().toString().padStart(2, "0");
+// let minutes = date.getMinutes().toString().padStart(2, "0");
+// let seconds = date.getSeconds().toString().padStart(2, "0");
+
+// 格式化为 "YYYY-MM-DD HH:mm:ss" 格式
+let nowtime = `${year}-${month}-${day}`;
+let mouthFirstDay = `${year}-${month}-${'01'}`;
+// console.log(nowtime,'22');
+console.log(mouthFirstDay,'ssss');
+
+localStorage.setItem("now", nowtime);
+localStorage.setItem("mouthFirstDay", mouthFirstDay);
 </script>
 
 <template>

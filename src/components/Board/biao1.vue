@@ -1,5 +1,6 @@
 <template>
   <div class="wBox">
+    
     <div class="bodyTop">
       <!-- <div style="margin: 0 10px 0 50px; font-size: 15px">时间粒度</div>
       <el-input
@@ -7,7 +8,7 @@
         placeholder="输入"
         style="width: 200px; margin-right: 20px"
       /> -->
-      <div style="margin: 0 10px 0 50px; font-size: 15px">时间粒度</div>
+      <div style="margin: 0 10px 0 50px; font-size: 15px">1 时间粒度</div>
       <el-select
         v-model="apiSelect"
         class="m-2"

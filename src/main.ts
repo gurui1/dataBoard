@@ -10,6 +10,7 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 // 自定义文字（使用默认文字不用设置）
 

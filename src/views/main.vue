@@ -51,7 +51,7 @@
       <div
         style="
           height: 68px;
-          border-bottom: 1px solid #E6E6E6;
+         
           display: flex;
           align-items: center;
           flex-direction: row-reverse;
@@ -97,7 +97,7 @@
             left: 55px;
           "
         >
-          &nbsp;&nbsp;&nbsp;&nbsp;MUJIE
+          &nbsp;&nbsp;&nbsp;&nbsp;数据看板
         </div>
       </div>
       <template v-for="item in menuConfig.menu" :key="item.index">
@@ -354,7 +354,9 @@ onUnmounted(() => {});
 }
 .homeBody {
   flex: 1;
-  height: 0;
+  height: 100vh;
+  background-color: white;
+  overflow: auto; /* 当内容超出视窗大小时显示滚动条 */
 }
 .rightTou:hover {
   background-color: #d5d5d5;
