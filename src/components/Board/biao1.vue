@@ -1,231 +1,105 @@
 <template>
   <div class="wBox">
-    
     <div class="bodyTop">
-      <!-- <div style="margin: 0 10px 0 50px; font-size: 15px">时间粒度</div>
-      <el-input
-        v-model="searchInput"
-        placeholder="输入"
-        style="width: 200px; margin-right: 20px"
-      /> -->
-      <div style="margin: 0 10px 0 50px; font-size: 15px">1 时间粒度</div>
-      <el-select
-        v-model="apiSelect"
-        class="m-2"
-        placeholder="请选择"
-        style="width: 240px"
-      >
-        <el-option
-          v-for="item in selectOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
-      </el-select>
-      <el-button
-        type="primary"
-        style="font-size: 13px; margin-left: 10px"
-        @click="getData"
-        >查询&nbsp;<el-icon> <Search /> </el-icon
-      ></el-button>
+      <div class="title"> <span class="wenzi">搜索条件</span></div>
+      <div style="margin-left: -4vw; font-size: 15px"> 账户简称: &nbsp; </div>
+      <el-input v-model="jianCheng" style="width: 150px">
+
+      </el-input>
+      <div style="margin-left: 2vw; font-size: 15px"> 账户类别: &nbsp; </div>
+      <el-input v-model="leiBie" style="width: 150px"></el-input>
+      <div style="margin-left: 2vw; font-size: 15px"> 银行余额: &nbsp; </div>
+      <el-input v-model="yuE1" style="width: 150px"></el-input> &nbsp;
+      一 &nbsp;
+      <el-input v-model="yuE2" style="width: 150px"></el-input>
+      <el-button type="primary" class="btn1"  @click="getData">查询&nbsp;
+      </el-button>
+      <el-button type="primary" class="btn2"  @click="toExcel">导出&nbsp;
+      </el-button>
+
     </div>
     <div class="bodyBottom">
-      <div style="padding: 3vh; box-sizing: border-box">
-        <vxe-table
-          show-overflow
-          show-header-overflow
-          border="inner"
-          height="590"
-          :row-config="{ height: 50 }"
-          :scroll-x="{ enabled: true, gt: 10 }"
-          :scroll-y="{ enabled: true, gt: 100 }"
-          :data="tableData"
-          v-if="tableData.length != 0"
-        >
-        <vxe-column field="createTime" title="时间" align="center" width="180" fixed="left">
-        </vxe-column>
+      <div class="title2"> <span class="wenzi">查询结果</span></div>
 
-        <vxe-column v-for="(item,index) in tableData[0].electricity" :key="index"  width="140" align="center">
-            <template #header>
-                <div>{{ item.key }}</div>
-            </template>
-            <template #default="{ row }">
-                <div>
-                    {{ row.electricity[index].value}}
-                </div>
-            </template>
-          </vxe-column>
-          <vxe-column v-for="(item,index) in tableData[0].totalPrice" :key="index"  width="140" align="center">
-            <template #header>
-                <div>{{ item.key }}</div>
-            </template>
-            <template #default="{ row }">
-                <div>
-                    {{ row.totalPrice[index].value}}
-                </div>
-            </template>
-          </vxe-column>
-          <vxe-column
-            align="center"
-            v-for="(item, index) in tableData[0].detail"
-            :key="index"
-            width="200"
-          >
-            <template #header>
-              <div>{{ item.key }}</div>
-            </template>
-            <template #default="{ row }">
-              <div>
-                {{ row.detail[index].value }}
-              </div>
-            </template>
-          </vxe-column>
-        </vxe-table>
-        <vxe-table v-else :data="tableData"></vxe-table>
-        <!-- <el-table
-          :data="tableData"
-          style="width: 100%; height: 60vh"
-          table-layout="fixed"
-          :header-cell-style="{
-            background: '#eef1f6',
-            color: '#606266',
-            height: '70px',
-          }"
-          :cell-style="{ height: '50px' }"
-          v-if="tableData[0]"
-        >
-          <el-table-column label="时间" prop="createTime" align="center" width="100" fixed></el-table-column>
-          <el-table-column v-for="(item,index) in tableData[0].electricity" :key="index"  width="140" align="center">
-            <template #header>
-                <div>{{ item.key }}</div>
-            </template>
-            <template v-slot="scoped">
-                <div>
-                    {{ tableData[scoped.$index].electricity[index].value}}
-                </div>
-            </template>
-          </el-table-column>
-          <el-table-column v-for="(item,index) in tableData[0].totalPrice" :key="index"  width="140" align="center">
-            <template #header>
-                <div>{{ item.key }}</div>
-            </template>
-            <template v-slot="scoped">
-                <div>
-                    {{ tableData[scoped.$index].totalPrice[index].value}}
-                </div>
-            </template>
-          </el-table-column>
-          <el-table-column v-for="(item,index) in tableData[0].detail" :key="index"  width="190" align="center">
-            <template #header>
-                <div>{{ item.key }}</div>
-            </template>
-            <template v-slot="scoped">
-                <div>
-                    {{ tableData[scoped.$index].detail[index].value}}
-                </div>
-            </template>
-          </el-table-column>
-        </el-table> -->
+      <el-table v-if="tableData.length != 0" :data="tableData" border  class="table">
+        <el-table-column align="center" prop="账户名称" label="账户名称" width="220" />
+        <el-table-column align="center" prop="账户简称" label="账户简称" width="220" />
+        <el-table-column align="center" prop="账户类别" label="账户类别" width="220" />
+        <el-table-column align="center" prop="期初余额" label="期初余额" width="220">
+          <template #header>
+            <span>期初余额</span>
+            <span>(银行余额)</span>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" prop="理财" label="理财" width="220" />
+        <el-table-column align="center" prop="贷款" label="贷款" width="220" />
+        <el-table-column align="center" prop="合计" label="合计" />
+      </el-table>
+      <div v-if="tableData.length == 0" class="table">
+       <span class="zanwu">暂无数据</span> 
       </div>
-      <div style="bottom: 3vh; position: absolute; right: 60px">
-        <el-pagination
-          v-model:page-size="pageSize"
-          :background="true"
-          layout="total, prev, pager, next, jumper"
-          :total="total"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        />
-      </div>
+
+
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-// const generateColumns = (length = 10, prefix = "column-", props?: any) =>
-//   Array.from({ length }).map((_, columnIndex) => ({
-//     ...props,
-//     key: `${prefix}${columnIndex}`,
-//     dataKey: `${prefix}${columnIndex}`,
-//     title: `Column ${columnIndex}`,
-//     width: 150,
-//   }));
 
-// const generateData = (
-//   columns: ReturnType<typeof generateColumns>,
-//   length = 200,
-//   prefix = "row-"
-// ) =>
-//   Array.from({ length }).map((_, rowIndex) => {
-//     return columns.reduce(
-//       (rowData, column, columnIndex) => {
-//         rowData[column.dataKey] = `Row ${rowIndex} - Col ${columnIndex}`;
-//         return rowData;
-//       },
-//       {
-//         id: `${prefix}${rowIndex}`,
-//         parentId: null,
-//       }
-//     );
-//   });
+import { exportExcel } from "../../excelConfig"
+let jianCheng: any = ref()
+let leiBie: any = ref()
+let yuE1: any = ref()
+let yuE2: any = ref()
 
-// const columns = generateColumns(500);
-// const data = generateData(columns, 10);
 
-import { dianluGetdata } from "@/api/production/dianlu";
-
-let pageSize = ref(10);
-let total = ref();
-let payLoad = reactive({
-  pageSize: pageSize,
-  currPage: "1",
-});
-
-const apiSelect = ref(1);
-const selectOptions = [
+const tableData = [
   {
-    value: 1,
-    label: "实时",
+    账户名称: '北京百悟科技有限公司',
+    账户简称: '北京北新桥工行',
+    账户类别: '基本户',
+    期初余额: '100010.00',
+    理财: '1000.00',
+    贷款: '5000.00',
+    合计: '6000.00',
   },
   {
-    value: 5,
-    label: "5分钟",
+    账户名称: '北京百悟科技有限公司',
+    账户简称: '北京北新桥工行',
+    账户类别: '基本户',
+    期初余额: '100010.00',
+    理财: '1000.00',
+    贷款: '5000.00',
+    合计: '6000.00',
   },
   {
-    value: 15,
-    label: "15分钟",
-  },
-  {
-    value: 60,
-    label: "小时实时",
+    账户名称: '北京百悟科技有限公司',
+    账户简称: '北京北新桥工行',
+    账户类别: '基本户',
+    期初余额: '100010.00',
+    理财: '1000.00',
+    贷款: '5000.00',
+    合计: '6000.00',
   },
 ];
 
-const tableData: any = ref([]);
-const getData = () => {
-  let payLoadR = {
-    interval: apiSelect.value,
-    pageSize: payLoad.pageSize,
-    currPage: payLoad.currPage,
-  };
-  dianluGetdata(payLoadR).then((res) => {
-    tableData.value = res.data.data.Data ? res.data.data.Data : [];
-    total.value = res.data.data.count;
-    console.log(res.data.data.Data);
-  });
+
+
+let getData = () => {
+  console.log('getData');
+
 };
-const handleSizeChange = (e) => {
-  payLoad.pageSize = e;
-  getData();
+let toExcel = () => {
+  console.log('toExcel');
+  exportExcel('期初余额表', tableData);
+
 };
-const handleCurrentChange = (e) => {
-  payLoad.currPage = e;
-  getData();
-};
+
+
 onMounted(() => {
   getData();
 });
-onUnmounted(() => {});
+onUnmounted(() => { });
 </script>
 
 <style lang="less" scoped>
@@ -239,7 +113,7 @@ onUnmounted(() => {});
 
 .bodyTop {
   width: 98.8%;
-  height: 10vh;
+  height: 20vh;
   background-color: #fff;
   margin-top: 10px;
   box-shadow: 0 0px 12px 0px #d9d9d9;
@@ -260,35 +134,76 @@ onUnmounted(() => {});
   padding: 15px;
 }
 
-/deep/.vxe-table--header{
-    height: 70px;
-    background-color: #EEF1F6;
-    font-weight: 600;
+.title {
+  position: relative;
+  width: 6vw;
+  height: 4vh;
+  font-size: 1.1vw;
+  font-weight: bold;
+  color: #fff;
+  background-color: #6AB4E5;
+  border-radius: 5px;
+  text-align: center;
+  left: 1vw;
+  top: -7vh;
+
+  .wenzi {
+    letter-spacing: 1px;
+    line-height: 4vh;
+  }
 }
 
-
-/*表格滚动条样式*/
-/deep/.vxe-table--body-wrapper::-webkit-scrollbar{
-    width: 10px;
+.btn1 {
+  position: absolute;
+  left: 15vw;
+  top: 27vh;
+  margin-left: 5px;
+}
+.btn2 {
+  position: absolute;
+  left: 20vw;
+  top: 27vh;
+  margin-left: 5px;
 }
 
-/deep/.vxe-table--body-wrapper::-webkit-scrollbar-thumb{
-    border-radius: 5px;
-    height: 10px;
-    background-color: #818181 !important;
-    border-radius: 30px !important;
+.title2 {
+  position: relative;
+  width: 6vw;
+  height: 4vh;
+  font-size: 1.1vw;
+  font-weight: bold;
+  color: #fff;
+  background-color: #6AB4E5;
+  border-radius: 5px;
+  text-align: center;
+  left: 0.1vw;
+  top: 0vh;
+
+  .wenzi {
+    letter-spacing: 1px;
+    line-height: 4vh;
+  }
 }
 
-/deep/.vxe-table--body-wrapper::-webkit-scrollbar-thumb:hover{
-    border-radius: 5px;
-    height: 10px;
-    background-color: #b8b8b8 !important;
-    border-radius: 30px !important;
+.table {
+  width: 95%;
+  // height: auto;
+  // background-color: #6AB4E5;
+  margin-top: 3vh;
+  .zanwu{
+    position: relative;
+    left: 35vw;
+    top: 3vh;
+    font-size: 2vw;
+    letter-spacing: 2px;
+    color: rgba(128, 128, 128, 0.6); /* 使用 RGBA 表示灰色，最后一个值 0.6 表示透明度 */
+    font-weight: bold;
+  }
 }
-/deep/.vxe-table--body-wrapper::-webkit-scrollbar-track{
-    // box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-    border-radius: 2px;
-    // background-color: #5C6974;
-    // background: rgba(0,0,0,0.4);
+/deep/.el-table {
+  --el-table-border-color: rgba(156, 136, 136,0.5);
+  --el-table-border: 1px solid rgba(156, 136, 136,0.5);
+  // --el-table-text-color: #21448b;
+  // --el-table-header-text-color: #4168b7;
 }
 </style>

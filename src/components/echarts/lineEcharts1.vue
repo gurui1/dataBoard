@@ -193,8 +193,7 @@ let changeTime = (a: any, b: any) => {
 let getData = () => {
 
     changeTime(timeLineVal.value[0], timeLineVal.value[1]);
-    // console.log(timeLineVal.value[0], timeLineVal.value[1], '555');
-    // console.log(radio.value);
+   
 
 
     initEcharts();

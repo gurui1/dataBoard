@@ -270,13 +270,8 @@ let changeTime = (a, b) => {
     timeLineVal.value[1] = `${year2}-${month2}-${day2}`;
 }
 let getData = () => {
-    // console.log(timeLineVal.value[0],'ws');
     changeTime(timeLineVal.value[0], timeLineVal.value[1]);
-    console.log(timeLineVal.value[0], timeLineVal.value[1], '555');
-
-
     initEcharts();
-
 };
 
 onMounted(() => {
@@ -297,13 +292,7 @@ onUnmounted(() => {
 /deep/.el-input__icon{
     display: none;
 }
-/deep/.el-range-separator{
-    // display: none;
-    // margin: auto;
-    // width: 5px!important;
-    // margin: -1px !important;
-    // padding: 0px !important;
-}
+
 #all1 {
     box-sizing: border-box;
     width: 99%;
@@ -385,7 +374,14 @@ onUnmounted(() => {
 
 .el-button {
     color: white;
-    width: 50px;
+    // width: 50px;
+    // height: 30px;
+    // position: relative;
+    position: absolute;
+    top: 0vh;
+    
+    left: 14vw;
     margin-left: 1vw;
+    padding: 0px 8px;
 }
 </style>

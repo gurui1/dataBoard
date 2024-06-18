@@ -53,3 +53,4 @@ export const useMain = defineStore('main', {
   // },
   persist: true,
 })
+
