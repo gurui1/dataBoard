@@ -97,16 +97,16 @@ function getCookieValue(cookieName) {
 // console.log(jsessionid, 'cookie');
 
 const urlParams = new URLSearchParams(window.location.search);
-const token = urlParams.get('token');
+const token = urlParams.get('token') || localStorage.getItem('token');
 console.log(token, '超链接');
 if (token) {
   // 设置 token
-  console.log(11112112);
+  // console.log(11112112);
 
   localStorage.setItem('token', token);
   // 设置过期时间为 30 分钟后的时间戳（单位为毫秒）
   const now = new Date();
-  const Overtime: any = now.getTime() + 30 * 60 * 1000; // 30 minutes
+  const Overtime: any = now.getTime() + 1 * 10 * 1000; // 30 minutes
   localStorage.setItem('tokenOvertime', Overtime);
 }
 
@@ -115,30 +115,19 @@ router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token');
   const tokenOvertime: any = localStorage.getItem('tokenOvertime');
   const now = new Date().getTime();
-  // console.log(now, 'now');
-  // console.log(tokenOvertime, 'tokenOvertime');
-
-  //如果超时 跳到404 
-  if (now > tokenOvertime) {
-    
+  if (to.path === "/") next("/main")
+  if (to.path === "/404") {
+    next()
+    localStorage.removeItem("token")
+    localStorage.removeItem("tokenOvertime")
+  }
+  else if (now > tokenOvertime) {
     next({ path: "/404" });
-    localStorage.removeItem('token');
-    // console.log(token);
 
-  } else if (to.path === "/") {
-      if (!token) {
-        next({ path: "/404" }); // 没有token，重定向到404页面
-      } else {
-        next({ path: "/main" }); // 有token，重定向到/main页面
-      }
-    } else if (to.path === "/dataBoard" || to.path.startsWith("/biao")) {
-      // 正常跳转到数据看板或其他以 /biao 开头的路径
-      if (!token) {
-        next({ path: "/404" });
-      }
-      next();
-    }
-    next();
+  } else if (!token) {
+    next({ path: "/404" });
+  }
+  next();
 
 
 
