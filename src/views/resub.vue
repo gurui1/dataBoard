@@ -5,7 +5,10 @@
     :index="props.configData.index"
   >
     <template #title>
-      <el-icon v-if="props.configData.icon"><component :is="props.configData.icon"></component></el-icon>
+      <el-icon v-if="props.configData.icon">
+        <!-- 用于动态渲染组件的内置组件 :is 属性来指定要渲染的组件名称或组件对象 -->
+        <component :is="props.configData.icon"></component>
+      </el-icon>
       <span>{{ props.configData.title }}</span>
     </template>
     <template v-for="item in props.configData.children" :key="item.index">

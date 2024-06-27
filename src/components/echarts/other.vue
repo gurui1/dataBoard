@@ -11,10 +11,10 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, reactive } from "vue";
+// import { onMounted, onUnmounted, ref, reactive } from "vue";
 //   import * as echarts from "echarts";
 const props = defineProps(["title",]);
-let a:any;
+// let a:any;
 let xx: any = ref();
 let xx1 = ref(2000);
 let xx2 = ref(3000);

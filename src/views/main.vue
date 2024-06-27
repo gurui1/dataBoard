@@ -1,5 +1,7 @@
 <template>
   <div class="zwBox">
+    <!-- :collapse 动态绑定是否关闭 :default-active动态绑定应打开的页面 
+     unique-opened	是否只保持一个子菜单的展开 默认为false 即可同时打开多个子菜单 -->
     <el-menu
       class="menuSty"
       :collapse="useMain().isCollapse"
@@ -9,6 +11,7 @@
       text-color="#fff"
       @select="handleSelect"
     >
+    <!-- 按钮 -->
       <div
         v-if="useMain().closeButton"
         style="
@@ -23,7 +26,7 @@
         <button
           id="mybutton"
           class="button"
-          @click="jiantou"
+          @click="menuChange"
           :style="{
             transform: useMain().isCollapse
               ? 'scale(0.6) translateX(5px) rotate(180deg)'
@@ -48,6 +51,7 @@
           </div>
         </button>
       </div>
+      <!-- 资金看板前图案 -->
       <div
         style="
           height: 68px;
@@ -97,9 +101,10 @@
             left: 55px;
           "
         >
-          &nbsp;&nbsp;&nbsp;&nbsp;数据看板
+          &nbsp;&nbsp;&nbsp;&nbsp;资金看板
         </div>
       </div>
+      <!-- <template> 元素在 Vue.js 中作为循环渲染的容器更加语义化，因为它在最终渲染的 HTML 中不会留下额外的节点。 -->
       <template v-for="item in menuConfig.menu" :key="item.index">
         <resub :configData="item"></resub>
       </template>
@@ -110,7 +115,7 @@
           class="closeBtn"
           v-if="!useMain().closeButton"
           style=""
-          @click="jiantou"
+          @click="menuChange"
         >
           <el-icon v-if="!useMain().isCollapse"><Fold /></el-icon>
           <el-icon v-else><Expand /></el-icon>
@@ -174,7 +179,7 @@
           v-model="useMain().cebianName"
           type="card"
           class="demo-tabs"
-          closable
+          closable="true"
           @tab-remove="removeTab"
           @tab-change="changeTab"
         >
@@ -243,8 +248,9 @@ const changeTab: any = (targetName: string) => {
   router.replace(targetName.split("|")[0]);
 };
 const handleSelect = (key: string, _keyPath: string[]) => {
-  // console.log(key, keyPath, "6666");
+  // console.log(key, "6666");
   useMain().cebianName = key;
+  // sign用来标记是否有这个标签 默认为true 循环遍历editableTabs 如果有这个标签就赋值为false 如果没有就push进去 
   let sign = true;
   useMain().editableTabs.forEach((item) => {
     // console.log(item.name);
@@ -253,15 +259,25 @@ const handleSelect = (key: string, _keyPath: string[]) => {
     }
   });
   if (sign) {
+    //  split() 方法可以将字符串按照指定的分隔符分割成数组 
+    // 在key中寻找 |   “ | ”将字符串分为前后两部分 取后一部分
     useMain().editableTabs.push({ title: key.split("|")[1], name: key });
   }
-  router.replace("/" + key.split("|")[0]);
+  // console.log(localStorage.getItem('token'),'00');
+  // const token = localStorage.getItem('token');
+  // console.log(token);
+  
+  // if(token == null) {
+  //   window.location.href = "http://127.0.0.1:5173/404";
+  //   console.log(404);
+  // }
+   
+  // else
+   router.replace("/" + key.split("|")[0]);
 };
-const jiantou = () => {
+const menuChange = () => {
   useMain().isCollapse = !useMain().isCollapse;
-  document.getElementsByClassName("button")[0].style.transform =
-    "scale(0.6) translateX(5px) rotate(0)";
-  //    transform: scale(0.6) rotate(180deg) translateX(5px);
+
 };
 const touxEnter = () => {
   document.getElementsByClassName("elaaa")[0].style.transform =
@@ -277,7 +293,7 @@ const tuichu = () => {
   router.replace("/login");
 };
 const toGeren = () => {
-  handleSelect("geren|个人中心", []);
+  // handleSelect("geren|个人中心", []);
   router.replace("/geren");
 };
 
@@ -445,12 +461,12 @@ onUnmounted(() => {});
   width: 56px;
   height: 56px;
   margin: 0;
-  overflow: hidden;
-  outline: none;
-  background-color: transparent;
-  transform: scale(0.6) translateX(5px) rotate(180deg);
-  transition-duration: 1s;
-  border: 0;
+  overflow: hidden;//如果内容溢出，隐藏超出部分。
+  outline: none;//清除默认的轮廓样式，通常用于去除链接和输入框的默认轮廓。
+  background-color: transparent;// 设置背景颜色为透明，即没有背景色
+  transform: scale(0.6) translateX(5px) rotate(180deg); //先缩小到原来的 60%（scale），再水平平移 5 像素（translateX），最后顺时针旋转 180 度（rotate）。
+  transition-duration: 1s; // 设置过渡效果持续时间为 1 秒，用于平滑过渡 CSS 属性的变化。
+  border: 0;// 清除边框，使元素没有边框
 }
 
 .button:before,

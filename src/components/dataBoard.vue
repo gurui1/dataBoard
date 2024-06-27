@@ -2,11 +2,13 @@
   <div id="all" ref="wBoxRef">
     <div class="top">
       <span class="title">财务数据分析看板</span>
+      <!-- <a  href="http://127.0.0.1:5173/" target="_blank" >跳转</a> -->
+      
       <div class="twoBtn">
-        <div class="one" @click="dialogVisible1 = true">操作日志</div>
+        <!-- <div class="one" @click="dialogVisible1 = true">操作日志</div>
         <el-dialog v-model="dialogVisible1" width="800" height="1000">
           This is dialog content.
-        </el-dialog>
+        </el-dialog> -->
         <div class="two" @click="tuiSong">推送至移动端</div>
 
         <el-dialog v-model="dialogVisible2" :show-close="false" class="dialog">
@@ -17,7 +19,7 @@
             </el-icon>
           </div>
           <div class="dialog-body">
-            <div >
+            <div>
               <div class="dialog-body-one">
                 <span class="label">接收人 : </span>
                 <!-- <input type="text"> -->
@@ -36,7 +38,8 @@
                     <span class="close" @click="closePng">&times;</span>
                     <!-- <a> 元素使用了 href 属性，将 imageUrl 设置为其值。这个链接允许用户点击下载捕获的图像。
                       通过设置 download 属性为 "账单.png"，浏览器会提示用户下载文件，文件名为“数据看板.png”。 -->
-                    <a class="Download" :href="imageUrl" download="数据看板.png">下载</a>
+                    <a class="Download" :href="imageUrl" download="数据看板.png">
+                       下载</a>
                     <img :src="imageUrl" alt="Captured Image">
 
                   </div>
@@ -45,20 +48,9 @@
               <div class="dialog-body-three">
                 <div class="one1" @click="faSong">确定发送</div>
                 <div class="two1" @click="close2">取消</div>
+               
               </div>
             </div>
-            <!-- <div v-if="a == 2">
-              <div class="dialog-body-four">推送成功</div>
-              <div class="dialog-body-five">
-                <div class="one1" @click="close2">确认</div>
-              </div>
-            </div>
-            <div v-if="a == 3">
-              <div class="dialog-body-six">推送失败，请联系系统管理员排查</div>
-              <div class="dialog-body-five">
-                <div class="one1" @click="close2">确认</div>
-              </div>
-            </div> -->
           </div>
         </el-dialog>
       </div>
@@ -84,6 +76,7 @@
     <div class="mid">
       <div class="left">
         <div class="one">
+
           <lineEcharts1 :title="'预计支出金额部门统计'"></lineEcharts1>
         </div>
         <div class="one">
@@ -138,14 +131,15 @@ import pieEcharts2 from "../components/echarts/pieEcharts2.vue"
 import lineEchartsL from "./echarts/lineEchartsL.vue"
 import lineEcharts1 from "./echarts/lineEcharts1.vue"
 import lineEcharts2 from "./echarts/lineEcharts2.vue"
-import other from "../components/other.vue"
+import other from "./echarts/other.vue"
 import html2canvas from 'html2canvas';
-let dialogVisible1 = ref(false)
+import { debounce } from 'lodash';// 防抖
+// let dialogVisible1 = ref(false)
 let dialogVisible2 = ref(false)
 
 
 let faSong = () => {
-  dialogVisible2.value=false;
+  dialogVisible2.value = false;
   let joker: any = ref(false);
   if (joker.value == true) {
     ElMessage({
@@ -153,28 +147,30 @@ let faSong = () => {
       type: 'success',
     })
   } else {
-      ElMessage.error('推送失败，请联系系统管理员排查.')
+    ElMessage.error('推送失败，请联系系统管理员排查.')
   }
 }
 let close2 = () => {
   dialogVisible2.value = false
+  showModal.value = false;
 }
 const initials = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九', '二十']
 
-const selectED = ref([])
+const selectED = ref(['一', '二', '三'])
 const options = Array.from({ length: 20 }).map((_, idx) => ({
   value: idx + 1,
   label: initials[idx]
 }))
-watchEffect(() => {
-  // Print the current value of selectED whenever it changes
-  console.log(selectED.value);
-  const selectedValues = selectED.value;
+watch(dialogVisible2, (newValue) => {
+  if (!newValue) {
+    showModal.value = false;
+  }
 });
-
-
-
-
+watchEffect(() => {
+  // console.log(selectED.value);
+  const selectedValues = selectED.value;
+  // console.log(selectedValues);
+});
 
 const imageUrl: any = ref(null);
 const showModal: any = ref(false);
@@ -182,22 +178,20 @@ const wBoxRef: any = ref(null);
 
 const captureAndDisplay = () => {
   const element = wBoxRef.value;
-
   if (element) {
     // 使用 html2canvas 库，将指定的HTML元素转换为一个canvas对象。这个库能够将DOM元素呈现为canvas
-    html2canvas(element).then((canvas) => {
+    html2canvas(element, {}).then((canvas) => {
       // canvas.toDataURL("image/png") 将canvas对象转换为一个包含PNG格式图像数据的base64编码的数据URL
       const imgData = canvas.toDataURL("image/png");
       imageUrl.value = imgData;
     });
   }
 };
-
-let tuiSong = () => {
-
+// 多次触发 tuiSong 函数后，在最后一次触发后的 300ms 后函数才会被执行。
+let tuiSong = debounce(() => {
   dialogVisible2.value = true
   captureAndDisplay()
-};
+}, 300)
 const showPng = () => {
   showModal.value = true;
 
@@ -325,11 +319,11 @@ onMounted(() => {
 
 .twoBtn {
   position: relative;
-  width: 13vw;
+  width: 6.5vw;
   // top: 13vh;
   // right: 5vw;
   height: 5vh;
-  left: 60vw;
+  left: 66.5vw;
   display: inline-block;
   // background-color: red;
   display: flex;

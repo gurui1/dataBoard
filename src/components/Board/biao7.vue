@@ -1,11 +1,11 @@
 el-date-picker<template>
   <div class="wBox">
     <div class="bodyTop">
-      <div class="title"> <span class="wenzi">搜索条件</span></div>
+      <div class="title"> <div class="wenzi">搜索条件</div></div>
       <div class="search">
-        <div class="top">
+         <div class="top">
           <div class="three">
-            <span>&nbsp;&nbsp;日期: </span>
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;日期:&nbsp;&nbsp; </span>
             <el-date-picker v-model="timeLineVal" type="daterange" range-separator="至" start-placeholder="开始时间"
               end-placeholder="结束时间" :disabled-date="disabledDate" />
           </div>
@@ -36,7 +36,7 @@ el-date-picker<template>
         </div>
         <div class="bottom">
           <div class="three">
-            <span>&nbsp;&nbsp;一级业务: &nbsp;&nbsp;&nbsp;</span>
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;一级业务: &nbsp;&nbsp;&nbsp;</span>
             <el-input v-model="yijiYW" style="width: 6.4vw"> </el-input>
           </div>
           <div class="three">
@@ -44,8 +44,8 @@ el-date-picker<template>
             <el-input v-model="erjiYW" style="width: 6.4vw"> </el-input>
           </div>
           <div class="three">
-            <span>&nbsp;&nbsp;&nbsp;&nbsp;体系: &nbsp;&nbsp;&nbsp;</span>
-            <el-input v-model="tiXi" style="width: 6.4vw;margin-left: 15px;"></el-input>
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;体系: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <el-input v-model="tiXi" style="width: 6.4vw;"></el-input>
           </div>
           <div class="four">
             <span>&nbsp;&nbsp;&nbsp;&nbsp;部门: &nbsp;&nbsp;&nbsp;</span>
@@ -54,14 +54,17 @@ el-date-picker<template>
           <div class="four">
 
           </div>
-        </div>
+        </div> 
       </div>
-      <el-button type="success" class="btn1" @click="dengji">登记&nbsp;
+      <div class="button1">
+        <el-button type="success" class="btn" @click="dengji">登记&nbsp;
       </el-button>
-      <el-button type="primary" class="btn2" @click="getData">查询&nbsp;
+      <el-button type="primary" class="btn" @click="getData">查询&nbsp;
       </el-button>
-      <el-button type="primary" class="btn3" @click="toExcel">导出&nbsp;
+      <el-button type="primary" class="btn" @click="toExcel">导出&nbsp;
       </el-button>
+      </div>
+
 
       <el-dialog v-model="dialogValue" class="dialog" :show-close="false">
         <div class="dialog-title">
@@ -149,6 +152,9 @@ el-date-picker<template>
       <div v-if="tableData.length == 0" class="table">
         <span class="zanwu">暂无数据</span>
       </div>
+      <el-pagination class="fenye" v-model:current-page="currentPage" v-model:page-size="pageSize" :disabled="disabled"
+        :background="background" layout="total,,sizes, prev, pager, next , jumper" :total=total
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
 
 
     </div>
@@ -158,6 +164,23 @@ el-date-picker<template>
 <script setup lang="ts">
 
 import { exportExcel } from "../../excelConfig"
+
+let total: any = ref(100);
+const currentPage: any = ref(1)
+const pageSize = ref(10)
+const background = ref(true)
+const disabled = ref(false)
+const handleSizeChange = (e: any) => {
+  pageSize.value = e;
+  pageSize.value = e;
+  getData();
+};
+const handleCurrentChange = (e: any) => {
+  currentPage.value = e;
+  currentPage.value = e;
+  getData();
+};
+
 let timeLineVal: any = ref([]);
 let jianCheng: any = ref()
 let guiShu: any = ref()
@@ -172,17 +195,17 @@ let dialogValue: any = ref(false)
 let dialogData: any = reactive(
   {
     日期: '',
-    账户简称:'',
-    体系:'',
-    部门:'',
-    归属BU:'',
-    一级业务:'',
-    二级业务:'',
-    预计支出:'',
-    预计回款:'',
-    备注:''
+    账户简称: '',
+    体系: '',
+    部门: '',
+    归属BU: '',
+    一级业务: '',
+    二级业务: '',
+    预计支出: '',
+    预计回款: '',
+    备注: ''
   }
-      
+
 )
 
 
@@ -224,6 +247,103 @@ const tableData = [
     预计回款: '6000.00',
     备注: 'gg',
   },
+  {
+    日期: '2024-06-18',
+    账户简称: '北京北新桥工行',
+    体系: '我的',
+    部门: 'ss',
+    归属BU: '11',
+    一级业务: '22',
+    二级业务: '33',
+    预计支出: '6000.00',
+    预计回款: '6000.00',
+    备注: 'gg',
+  },
+  {
+    日期: '2024-06-18',
+    账户简称: '北京北新桥工行',
+    体系: '我的',
+    部门: 'ss',
+    归属BU: '11',
+    一级业务: '22',
+    二级业务: '33',
+    预计支出: '6000.00',
+    预计回款: '6000.00',
+    备注: 'gg',
+  },
+  {
+    日期: '2024-06-18',
+    账户简称: '北京北新桥工行',
+    体系: '我的',
+    部门: 'ss',
+    归属BU: '11',
+    一级业务: '22',
+    二级业务: '33',
+    预计支出: '6000.00',
+    预计回款: '6000.00',
+    备注: 'gg',
+  },
+  {
+    日期: '2024-06-18',
+    账户简称: '北京北新桥工行',
+    体系: '我的',
+    部门: 'ss',
+    归属BU: '11',
+    一级业务: '22',
+    二级业务: '33',
+    预计支出: '6000.00',
+    预计回款: '6000.00',
+    备注: 'gg',
+  },
+  {
+    日期: '2024-06-18',
+    账户简称: '北京北新桥工行',
+    体系: '我的',
+    部门: 'ss',
+    归属BU: '11',
+    一级业务: '22',
+    二级业务: '33',
+    预计支出: '6000.00',
+    预计回款: '6000.00',
+    备注: 'gg',
+  },
+  {
+    日期: '2024-06-18',
+    账户简称: '北京北新桥工行',
+    体系: '我的',
+    部门: 'ss',
+    归属BU: '11',
+    一级业务: '22',
+    二级业务: '33',
+    预计支出: '6000.00',
+    预计回款: '6000.00',
+    备注: 'gg',
+  },
+  {
+    日期: '2024-06-18',
+    账户简称: '北京北新桥工行',
+    体系: '我的',
+    部门: 'ss',
+    归属BU: '11',
+    一级业务: '22',
+    二级业务: '33',
+    预计支出: '6000.00',
+    预计回款: '6000.00',
+    备注: 'gg',
+  },
+  {
+    日期: '2024-06-18',
+    账户简称: '北京北新桥工行',
+    体系: '我的',
+    部门: 'ss',
+    归属BU: '11',
+    一级业务: '22',
+    二级业务: '33',
+    预计支出: '6000.00',
+    预计回款: '6000.00',
+    备注: 'gg',
+  },
+
 ];
 
 const disabledDate = (time: Date) => {
@@ -244,9 +364,9 @@ let close = () => {
   dialogValue.value = false;
 }
 // 提交
-let tijiao=()=>{
- 
-  console.log(dialogData,'dialogData');
+let tijiao = () => {
+
+  console.log(dialogData, 'dialogData');
   // 先调接口 提交成功后 清空 加个异步 等待接口返回值
   let joker: any = ref(true);
   if (joker.value == true) {
@@ -254,15 +374,15 @@ let tijiao=()=>{
       message: '提交成功',
       type: 'success',
     })
-    
+
   } else {
-      ElMessage.error('提交失败')
+    ElMessage.error('提交失败')
   }
   dialogValue.value = false;
   for (let key in dialogData) {
-      dialogData[key] = ''; // 或者根据需要设置为适当的初始值
-    }
-   
+    dialogData[key] = ''; // 或者根据需要设置为适当的初始值
+  }
+
 }
 // 进来之后第一时间获取时间
 let geiTime = () => {
@@ -329,14 +449,38 @@ onUnmounted(() => { });
   box-shadow: 0 0px 12px 0px #d9d9d9;
   display: flex;
   align-items: center;
+  flex-direction: column;
+
+  .title {
+    flex: 1;
+    width: 100%;
+    .wenzi {
+      letter-spacing: 1px;
+      line-height: 4vh;
+      width: 6vw;
+      height: 4vh;
+      font-size: 1.1vw;
+      font-weight: bold;
+      color: #fff;
+      background-color: #6AB4E5;
+      border-radius: 5px;
+      text-align: center;
+      position: relative;
+      top: 1vh;
+      left: 1vw;
+    }
+  }
 
   .search {
+
     width: 100%;
-    height: 14vh;
+    flex: 2;
+    // background-color: blue;
+    // height: 14vh;
     // background-color: red;
     position: relative;
-    left: -5vw;
-    top: 2vh;
+    // left: -5vw;
+    // top: 2vh;
     display: flex;
     flex-direction: column;
 
@@ -344,6 +488,26 @@ onUnmounted(() => { });
       flex: 1;
       display: flex;
       flex-direction: row;
+      top: 2vh;
+      position: relative;
+
+      .three {
+        flex: 1;
+
+      }
+
+      .four {
+        flex: 1.5;
+      }
+    }
+
+    .bottom {
+      flex: 1;
+      display: flex;
+      flex-direction: row;
+      top: 1vh;
+      box-sizing: border-box;
+      position: relative;
 
       .three {
         flex: 1;
@@ -353,19 +517,21 @@ onUnmounted(() => { });
         flex: 1.5;
       }
     }
+  }
 
-    .bottom {
-      flex: 1.3;
-      display: flex;
-      flex-direction: row;
-
-      .three {
-        flex: 1;
-      }
-
-      .four {
-        flex: 1.5;
-      }
+  .button1 {
+    width: 100%;
+    flex: 0.8;
+    position: relative;
+    
+    // background-color: aqua;
+    // height: 4vh;
+    .btn{
+      margin-top: 0.2vw;
+      margin-left: 2vw;
+    }
+    .btn :first-child{
+      margin-left: 0vw;
     }
   }
 }
@@ -383,45 +549,9 @@ onUnmounted(() => { });
   padding: 15px;
 }
 
-.title {
-  position: relative;
-  width: 6vw;
-  height: 4vh;
-  font-size: 1.1vw;
-  font-weight: bold;
-  color: #fff;
-  background-color: #6AB4E5;
-  border-radius: 5px;
-  text-align: center;
-  left: 1vw;
-  top: -9vh;
 
-  .wenzi {
-    letter-spacing: 1px;
-    line-height: 4vh;
-  }
-}
 
-.btn1 {
-  position: absolute;
-  left: 15vw;
-  top: 30vh;
-  // margin-left: 5px;
-}
 
-.btn2 {
-  position: absolute;
-  left: 20vw;
-  top: 30vh;
-  // margin-left: 5px;
-}
-
-.btn3 {
-  position: absolute;
-  left: 25.5vw;
-  top: 30vh;
-  // margin-left: 5px;
-}
 
 .title2 {
   position: relative;
@@ -444,9 +574,10 @@ onUnmounted(() => { });
 
 .table {
   width: 98%;
+  height: 48vh;
   // height: auto;
-  // background-color: #6AB4E5;
-  margin-top: 3vh;
+  background-color: #6AB4E5;
+  margin-top: 1vh;
 
   .zanwu {
     position: relative;
@@ -460,9 +591,16 @@ onUnmounted(() => { });
   }
 }
 
+.fenye {
+  position: fixed;
+  // left: 65vw;
+  right: 2vw;
+  bottom: 3vh;
+}
+
 /deep/.el-table {
-  --el-table-border-color: rgba(156, 136, 136, 0.5);
-  --el-table-border: 1px solid rgba(156, 136, 136, 0.5);
+  // --el-table-border-color: rgba(156, 136, 136, 0.5);
+  // --el-table-border: 1px solid rgba(156, 136, 136, 0.5);
   // --el-table-text-color: #21448b;
   // --el-table-header-text-color: #4168b7;
 }
@@ -530,10 +668,10 @@ onUnmounted(() => { });
       flex: 0.8;
 
       font-size: 0.7vw;
-        letter-spacing: 1px;
-        text-align: center;
-        line-height: 4vh;
-        color: white;
+      letter-spacing: 1px;
+      text-align: center;
+      line-height: 4vh;
+      color: white;
 
       .other-btn1 {
         width: 5vw;
@@ -544,9 +682,10 @@ onUnmounted(() => { });
         left: 8vw;
         cursor: pointer;
         top: -2vh;
+
         .text {
-        margin-top: 0.5vh !important;
-      }
+          margin-top: 0.5vh !important;
+        }
       }
 
       .other-btn2 {
@@ -558,12 +697,13 @@ onUnmounted(() => { });
         cursor: pointer;
         left: 16vw;
         top: -6vh;
+
         .text {
-        margin-top: 0.5vh !important;
-      }
+          margin-top: 0.5vh !important;
+        }
       }
 
-      
+
     }
   }
 }

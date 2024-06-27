@@ -49,7 +49,15 @@ let geiTime = () => {
 }
 const router = useRouter();
 let tiaozhuan = () => {
-    router.push('/biao1'); // 导航到 '/about' 路由
+    
+    if(props.title=='预计支出金额部门统计')
+    router.push('/biao3'); // 
+    if(props.title=='预计回款金额部门统计')
+    router.push('/biao4'); // 
+    if(props.title=='实际支出金额部门统计')
+    router.push('/biao5'); // 
+    if(props.title=='实际回款金额部门统计')
+    router.push('/biao6'); // 
 }
 const radio = ref(1)
 let myChart: any = null;
@@ -93,8 +101,8 @@ let initEcharts = () => {
             grid: {
                 left: "4%",
                 right: "6%",
-                bottom: "0%",
-                top: "10%",
+                bottom: "5%",
+                top: "5%",
                 containLabel: true,
             },
             yAxis: [
@@ -265,24 +273,16 @@ onUnmounted(() => {
 
 .title {
     color: black;
-    // font-size: 1.5vh;
-    font-size: 1.1vw;
+    font-size: 2.2vh;
     font-weight: bold;
     position: relative;
-    display: inline-block;
     height: 3vh;
     left: 3.3vw;
-
+    width: 12vw;
     top: 8px;
-    // left: 8px;
-    // 文字间距
     letter-spacing: 1px;
-
-
     border: 2px solid #4080D4;
     border-radius: 10px;
-
-
 
     .ball {
         width: 0.8rem;

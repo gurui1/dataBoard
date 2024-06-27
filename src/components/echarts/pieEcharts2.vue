@@ -16,6 +16,10 @@
             <el-button type="primary" @click="getData">查询</el-button>
 
         </div>
+        <div class="middle" @click="tiaozhuan">
+            <p >预计期末余额</p>
+            <div style="margin: 5px 10px">{{ tot }}万</div>
+        </div>
         <div class="chart" ref="midEcharts6"></div>
     </div>
 </template>
@@ -23,6 +27,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, reactive } from "vue";
 import * as echarts from "echarts";
+import { useRouter } from 'vue-router';
 
 const props = defineProps(["title",]);
 // import { title } from "process";
@@ -40,8 +45,10 @@ let geiTime = () => {
     timeLineVal.value[0] = localStorage.getItem('now');
     timeLineVal.value[1] = localStorage.getItem('now');
 }
-
-
+const router = useRouter();
+let tiaozhuan = () => { 
+    router.push('/biao2'); // 
+}
 
 let myChart: any = null;
 let first = true;
@@ -74,7 +81,6 @@ let initEcharts = () => {
     for (let i = 0; i < datas.length; i++) {
         tot.value += (datas[i].value / 10000);
     }
-    // console.log(tot.value, 's');
 
     if (first) {
         myChart = echarts.init(midEcharts6.value as any);
@@ -83,47 +89,47 @@ let initEcharts = () => {
 
     state = reactive({
         option: {
-            title: {
-                text: "{name|" + "期初金额" + "}",
-                subtext: "{val|" + tot.value + '万' + "}",
-                top: "39%",
-                left: "26%",
-                textStyle: {
-                    rich: {
-                        name: {
-                            fontSize: 15,
-                            color: "#464646",
-                            padding: [10, 10, 10, -8],
-                            fontWeight: "bold",
-                            fontStyle: "italic",
-                            fontFamily: "sans-serif",
-                            textBorderColor: "rgba(16, 239, 239, 1)",
-                            textBorderWidth: 1,
-                            textBorderType: "solid",
-                            // lineHeight: 26,
-                        },
-                    }
+            // title: {
+            //     text: "{name|" + "期初金额" + "}",
+            //     subtext: "{val|" + tot.value + '万' + "}",
+            //     top: "39%",
+            //     left: "26%",
+            //     textStyle: {
+            //         rich: {
+            //             name: {
+            //                 fontSize: 15,
+            //                 color: "#464646",
+            //                 padding: [10, 10, 10, -8],
+            //                 fontWeight: "bold",
+            //                 fontStyle: "italic",
+            //                 fontFamily: "sans-serif",
+            //                 textBorderColor: "rgba(16, 239, 239, 1)",
+            //                 textBorderWidth: 1,
+            //                 textBorderType: "solid",
+            //                 // lineHeight: 26,
+            //             },
+            //         }
 
-                },
-                subtextStyle: {
-                    rich: {
-                        val: {
-                            fontSize: 13,
-                            // fontWeight: "lighter",
-                            color: "#464646",
-                            padding: [10, 0, 10, 0],
-                            fontWeight: "bold",
-                            fontStyle: "italic",
-                            fontFamily: "sans-serif",
-                            textBorderColor: "rgba(16, 239, 239, 1)",
-                            textBorderWidth: 1,
-                            textBorderType: "solid",
-                            lineHeight: 26,
-                        },
-                    }
-                },
-                // textAlign: "center"
-            },
+            //     },
+            //     subtextStyle: {
+            //         rich: {
+            //             val: {
+            //                 fontSize: 13,
+            //                 // fontWeight: "lighter",
+            //                 color: "#464646",
+            //                 padding: [10, 0, 10, 0],
+            //                 fontWeight: "bold",
+            //                 fontStyle: "italic",
+            //                 fontFamily: "sans-serif",
+            //                 textBorderColor: "rgba(16, 239, 239, 1)",
+            //                 textBorderWidth: 1,
+            //                 textBorderType: "solid",
+            //                 lineHeight: 26,
+            //             },
+            //         }
+            //     },
+            //     // textAlign: "center"
+            // },
             tooltip: {
                 trigger: "item",
                 // formatter: "{b} ",
@@ -286,6 +292,50 @@ onUnmounted(() => {
 </script>
 
 <style setup lang="less" scoped>
+.middle{
+    position: absolute;
+    left:24%;
+    top: 52.5%;
+    z-index: 100;
+    width: 5vw;
+    // background-color: aqua;
+    height: 5.5vh;
+    font-weight:bold;
+    letter-spacing: 1px;
+    font-size: 0.8vw;
+    font-family: sans-serif;
+    font-style: italic;
+    cursor: pointer;
+    p{
+        margin: 5px -8px;
+        // margin-top: 10px;
+        box-sizing: border-box;
+        
+    }
+ 
+}
+.middle:hover::before {
+    content: '查看详情';
+    position: absolute;
+    top: 45px;
+    /* 根据需要调整位置 */
+    left: 10px;
+    width: 55px;
+    background-color: #fff;
+    /* 可选：背景色 */
+    padding: 5px;
+    /* 可选：内边距 */
+    border: 1px solid #ccc;
+    /* 可选：边框 */
+    border-radius: 4px;
+    /* 可选：边框圆角 */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    /* 可选：阴影 */
+    font-size: 12px;
+    /* 可选：字体大小 */
+    color: #333;
+    /* 可选：字体颜色 */
+}
 /deep/.el-date-editor {
     --el-date-editor-daterange-width: 185px;
 }

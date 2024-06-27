@@ -1,56 +1,59 @@
 <template>
   <div class="wBox">
     <div class="bodyTop">
-      <div class="title"> <span class="wenzi">搜索条件</span></div>
+      <div class="title"> <div class="wenzi">搜索条件</div></div>
       <div class="search">
         <div class="top">
           <div class="three">
-            <span>&nbsp;&nbsp;日期: &nbsp;&nbsp;&nbsp;</span>
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;日期: &nbsp;&nbsp;</span>
             <el-date-picker v-model="timeLineVal" type="daterange" range-separator="至" start-placeholder="开始时间"
               end-placeholder="结束时间"  :disabled-date="disabledDate" />
           </div>
           <div class="three">
             <span>&nbsp;&nbsp;账户简称: &nbsp;&nbsp;&nbsp;</span>
-            <el-input v-model="jianCheng" style="width: 150px"> </el-input>
+            <el-input v-model="jianCheng" style="width: 6.4vw"> </el-input>
 
           </div>
           <div class="three">
             <span>&nbsp;&nbsp;归属BU: &nbsp;&nbsp;&nbsp;</span>
-            <el-input v-model="guiShu" style="width: 150px"> </el-input>
+            <el-input v-model="guiShu" style="width: 6.4vw"> </el-input>
           </div>
           <div class="four">
-            <span>&nbsp;&nbsp;实际回款金额: &nbsp;&nbsp;&nbsp;</span>
-            <el-input v-model="yuJi1" style="width: 150px"> </el-input>
+            <span>&nbsp;&nbsp;实际支出金额: &nbsp;&nbsp;&nbsp;</span>
+            <el-input v-model="yuJi1" style="width: 6.4vw"> </el-input>
             &nbsp;一&nbsp;
-            <el-input v-model="yuJi2" style="width: 150px"> </el-input>
+            <el-input v-model="yuJi2" style="width: 6.4vw"> </el-input>
 
           </div>
 
         </div>
         <div class="bottom">
           <div class="three">
-            <span>&nbsp;&nbsp;一级业务: &nbsp;&nbsp;&nbsp;</span>
-            <el-input v-model="yijiYW" style="width: 150px"> </el-input>
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;一级业务: &nbsp;&nbsp;&nbsp;</span>
+            <el-input v-model="yijiYW" style="width: 6.4vw"> </el-input>
           </div>
           <div class="three">
             <span>&nbsp;&nbsp;二级业务: &nbsp;&nbsp;&nbsp;</span>
-            <el-input v-model="erjiYW" style="width: 150px"> </el-input>
+            <el-input v-model="erjiYW" style="width: 6.4vw"> </el-input>
           </div>
           <div class="three">
-            <span>&nbsp;&nbsp;&nbsp;&nbsp;体系: &nbsp;&nbsp;&nbsp;</span>
-            <el-input v-model="tiXi" style="width: 150px;margin-left: 15px;"></el-input>
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;体系: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <el-input v-model="tiXi" style="width: 6.4vw;"></el-input>
           </div>
           <div class="four">
             <span>&nbsp;&nbsp;部门: &nbsp;&nbsp;&nbsp;</span>
-            <el-input v-model="buMen" style="width: 150px"> </el-input>
+            <el-input v-model="buMen" style="width: 6.4vw"> </el-input>
           </div>
         </div>
       </div>
 
-      <el-button type="primary" class="btn1" @click="getData">查询&nbsp;
+      <div class="button">
+        
+      <el-button type="primary" class="btn" @click="getData">查询&nbsp;
       </el-button>
-      <el-button type="primary" class="btn2" @click="toExcel">导出&nbsp;
+      <el-button type="primary" class="btn" @click="toExcel">导出&nbsp;
       </el-button>
+      </div>
 
     </div>
     <div class="bodyBottom">
@@ -64,11 +67,14 @@
         <el-table-column align="center" prop="二级业务" label="二级业务" width="200" />
         <el-table-column align="center" prop="体系" label="体系" width="200" />
         <el-table-column align="center" prop="部门" label="部门" width="200" />
-        <el-table-column align="center" prop="实际回款金额" label="实际回款金额" />
+        <el-table-column align="center" prop="实际支出金额" label="实际支出金额" />
       </el-table>
       <div v-if="tableData.length == 0" class="table">
         <span class="zanwu">暂无数据</span>
       </div>
+      <el-pagination class="fenye" v-model:current-page="currentPage" v-model:page-size="pageSize" :disabled="disabled"
+        :background="background" layout="total,,sizes, prev, pager, next , jumper" :total=total
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
 
 
     </div>
@@ -78,6 +84,23 @@
 <script setup lang="ts">
 
 import { exportExcel } from "../../excelConfig"
+
+let total: any = ref(100);
+const currentPage: any = ref(1)
+const pageSize = ref(10)
+const background = ref(true)
+const disabled = ref(false)
+const handleSizeChange = (e: any) => {
+  pageSize.value = e;
+  pageSize.value = e;
+  getData();
+};
+const handleCurrentChange = (e: any) => {
+  currentPage.value = e;
+  currentPage.value = e;
+  getData();
+};
+
 let timeLineVal: any = ref([]);
 let jianCheng: any = ref()
 let guiShu: any = ref()
@@ -97,7 +120,7 @@ const tableData = [
     二级业务: '33',
     体系: '我的',
     部门: 'ss',
-    实际回款金额: '6000.00',
+    实际支出金额: '6000.00',
   },
   {
     日期: '2024-06-18',
@@ -107,7 +130,7 @@ const tableData = [
     二级业务: '33',
     体系: '我的',
     部门: 'ss',
-    实际回款金额: '6000.00',
+    实际支出金额: '6000.00',
   },
   {
     日期: '2024-06-18',
@@ -117,11 +140,11 @@ const tableData = [
     二级业务: '33',
     体系: '我的',
     部门: 'ss',
-    实际回款金额: '6000.00',
+    实际支出金额: '6000.00',
   },
 ];
 let toExcel = () => {// console.log('toExcel');
-  exportExcel('实际回款表', tableData);
+  exportExcel('实际支出表', tableData);
 
 };
 const disabledDate = (time: Date) => {
@@ -184,6 +207,7 @@ onUnmounted(() => { });
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-size: 0.8vw;
 }
 
 .bodyTop {
@@ -194,14 +218,39 @@ onUnmounted(() => { });
   box-shadow: 0 0px 12px 0px #d9d9d9;
   display: flex;
   align-items: center;
+  flex-direction: column;
+
+  .title {
+    flex: 1;
+    width: 100%;
+    .wenzi {
+      letter-spacing: 1px;
+      line-height: 4vh;
+      width: 6vw;
+      height: 4vh;
+      font-size: 1.1vw;
+      font-weight: bold;
+      color: #fff;
+      background-color: #6AB4E5;
+      border-radius: 5px;
+      text-align: center;
+      position: relative;
+      top: 1vh;
+      left: 1vw;
+    }
+  }
 
   .search {
-    width: 90%;
-    height: 14vh;
+
+    width: 80%;
+    flex: 2;
+    // background-color: blue;
+    // height: 14vh;
     // background-color: red;
     position: relative;
-    left: -5vw;
-    top: 2vh;
+    left: -10%;
+    // left: -5vw;
+    // top: 2vh;
     display: flex;
     flex-direction: column;
 
@@ -209,6 +258,26 @@ onUnmounted(() => { });
       flex: 1;
       display: flex;
       flex-direction: row;
+      top: 2vh;
+      position: relative;
+
+      .three {
+        flex: 1;
+
+      }
+
+      .four {
+        flex: 1.5;
+      }
+    }
+
+    .bottom {
+      flex: 1;
+      display: flex;
+      flex-direction: row;
+      top: 1vh;
+      box-sizing: border-box;
+      position: relative;
 
       .three {
         flex: 1;
@@ -218,19 +287,19 @@ onUnmounted(() => { });
         flex: 1.5;
       }
     }
+  }
 
-    .bottom {
-      flex: 1.3;
-      display: flex;
-      flex-direction: row;
-
-      .three {
-        flex: 1;
-      }
-
-      .four {
-        flex: 1.5;
-      }
+  .button {
+    width: 100%;
+    flex: 0.8;
+    // background-color: aqua;
+    // height: 4vh;
+    .btn{
+      margin-top: 0.2vw;
+      margin-left: 2vw;
+    }
+    .btn :first-child{
+      margin-left: 0vw;
     }
   }
 }
@@ -248,40 +317,7 @@ onUnmounted(() => { });
   padding: 15px;
 }
 
-.title {
-  position: relative;
-  width: 6vw;
-  height: 4vh;
-  font-size: 1.1vw;
-  font-weight: bold;
-  color: #fff;
-  background-color: #6AB4E5;
-  border-radius: 5px;
-  text-align: center;
-  left: 1vw;
-  top: -9vh;
 
-  .wenzi {
-    letter-spacing: 1px;
-    line-height: 4vh;
-  }
-}
-
-.btn1 {
-  position: absolute;
-  left: 15vw;
-
-  top: 30vh;
-  margin-left: 5px;
-}
-
-.btn2 {
-  position: absolute;
-  left: 20vw;
-
-  top: 30vh;
-  margin-left: 5px;
-}
 
 .title2 {
   position: relative;
@@ -304,9 +340,9 @@ onUnmounted(() => { });
 
 .table {
   width: 98%;
-  // height: auto;
+  height: 48vh;
   // background-color: #6AB4E5;
-  margin-top: 3vh;
+  margin-top: 1vh;
 
   .zanwu {
     position: relative;
@@ -319,9 +355,15 @@ onUnmounted(() => { });
     font-weight: bold;
   }
 }
+.fenye {
+  position: fixed;
+  // left: 65vw;
+  right: 2vw;
+  bottom: 3vh;
+}
 /deep/.el-table {
-  --el-table-border-color: rgba(156, 136, 136,0.5);
-  --el-table-border: 1px solid rgba(156, 136, 136,0.5);
+  // --el-table-border-color: rgba(156, 136, 136,0.5);
+  // --el-table-border: 1px solid rgba(156, 136, 136,0.5);
   // --el-table-text-color: #21448b;
   // --el-table-header-text-color: #4168b7;
 }

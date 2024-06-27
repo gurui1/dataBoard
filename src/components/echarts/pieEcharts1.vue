@@ -12,9 +12,18 @@
             <span>支出日期: </span>
             <el-date-picker v-model="timeLineVal" type="daterange" range-separator="至" start-placeholder="开始时间"
                 end-placeholder="结束时间" :size='small' :disabled-date="disabledDate" />
+                <!-- <label for="single-date">选择日期：</label> -->
+                <!-- <input type="date" v-model="timeLineVal[0]" name="single-date">
+                一
+                <input type="date" v-model="timeLineVal[1]" > -->
 
-            <el-button type="primary" @click="getData">查询</el-button>
+                 &nbsp; <el-button type="primary" @click="getData">查询</el-button>
 
+
+        </div>
+        <div class="middle" @click="tiaozhuan">
+            <p >期初余额</p>
+            <div style="margin: 5px 10px">{{ tot }}万</div>
         </div>
         <div class="chart" ref="midEcharts6"></div>
     </div>
@@ -23,7 +32,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, reactive } from "vue";
 import * as echarts from "echarts";
-
+import { useRouter } from 'vue-router';
 const props = defineProps(["title",]);
 // import { title } from "process";
 //   import { getData2 } from "../../api/diTan/api";
@@ -34,14 +43,17 @@ const disabledDate = (time: Date) => {
     return time.getTime() > currentTime.getTime();
 }
 let timeLineVal: any = ref([]);
-
+const router = useRouter();
+let tiaozhuan = () => {
+    router.push('/biao1'); // 
+}
 
 let geiTime = () => {
     timeLineVal.value[0] = localStorage.getItem('now');
     timeLineVal.value[1] = localStorage.getItem('now');
 }
 
-
+// let small:any=ref('small')
 
 let myChart: any = null;
 let first = true;
@@ -83,47 +95,48 @@ let initEcharts = () => {
 
     state = reactive({
         option: {
-            title: {
-                text: "{name|" + "期初金额" + "}",
-                subtext: "{val|" + tot.value + '万' + "}",
-                top: "39%",
-                left: "26%",
-                textStyle: {
-                    rich: {
-                        name: {
-                            fontSize: 15,
-                            color: "#464646",
-                            padding: [10, 10, 10, -8],
-                            fontWeight: "bold",
-                            fontStyle: "italic",
-                            fontFamily: "sans-serif",
-                            textBorderColor: "rgba(16, 239, 239, 1)",
-                            textBorderWidth: 1,
-                            textBorderType: "solid",
-                            // lineHeight: 26,
-                        },
-                    }
+            // title: {
+            //     text: "{name|" + "期初金额" + "}",
+            //     subtext: "{val|" + tot.value + '万' + "}",
+            //     top: "39%",
+            //     left: "26%",
+            //     textStyle: {
+            //         rich: {
+            //             name: {
+            //                 fontSize: 15,
+            //                 color: "#464646",
+            //                 padding: [10, 10, 10, -8],
+            //                 fontWeight: "bold",
+            //                 fontStyle: "italic",
+            //                 fontFamily: "sans-serif",
+            //                 textBorderColor: "rgba(16, 239, 239, 1)",
+            //                 textBorderWidth: 1,
+            //                 textBorderType: "solid",
+            //                 // lineHeight: 26,
+            //             },
+                        
+            //         }
 
-                },
-                subtextStyle: {
-                    rich: {
-                        val: {
-                            fontSize: 13,
-                            // fontWeight: "lighter",
-                            color: "#464646",
-                            padding: [10, 0, 10, 0],
-                            fontWeight: "bold",
-                            fontStyle: "italic",
-                            fontFamily: "sans-serif",
-                            textBorderColor: "rgba(16, 239, 239, 1)",
-                            textBorderWidth: 1,
-                            textBorderType: "solid",
-                            lineHeight: 26,
-                        },
-                    }
-                },
-                // textAlign: "center"
-            },
+            //     },
+            //     subtextStyle: {
+            //         rich: {
+            //             val: {
+            //                 fontSize: 13,
+            //                 // fontWeight: "lighter",
+            //                 color: "#464646",
+            //                 padding: [10, 0, 10, 0],
+            //                 fontWeight: "bold",
+            //                 fontStyle: "italic",
+            //                 fontFamily: "sans-serif",
+            //                 textBorderColor: "rgba(16, 239, 239, 1)",
+            //                 textBorderWidth: 1,
+            //                 textBorderType: "solid",
+            //                 lineHeight: 26,
+            //             },
+            //         }
+            //     },
+            //     // textAlign: "center"
+            // },
             tooltip: {
                 trigger: "item",
                 // formatter: "{b} ",
@@ -192,9 +205,6 @@ let initEcharts = () => {
                     );
                 }
             },
-
-
-
             // 图表颜色配置项
             color: ["#81D3F8", "#80FFFF", "#CAF982", "#FFFF80", "#FACD91", "#EC808D"],
 
@@ -247,12 +257,22 @@ let initEcharts = () => {
             ],
         },
     });
+    
 
     state.option && myChart.setOption(state.option);
     window.addEventListener("resize", function () {
         myChart.resize();
     });
+    // myChart.on('click', function(params:any) {
+    //     console.log(params,'1111');
+        
+   
+    // });
+
+
+   
 };
+
 let changeTime = (a, b) => {
     // new Date() 构造函数会创建一个新的 Date 对象，并且默认初始化为当前的日期和时间。如果你不传递任何参数，new Date() 会返回当前的日期和时间。
     //如果传递了参数，如一个日期字符串、一个时间戳或年、月、日等值，new Date() 会根据这些输入初始化 Date 对象对应的日期和时间
@@ -291,6 +311,51 @@ onUnmounted(() => {
 </script>
 
 <style setup lang="less" scoped>
+.middle{
+    position: absolute;
+    left:24%;
+    top: 52.5%;
+    z-index: 100;
+    width: 5vw;
+    // background-color: aqua;
+    height: 5.5vh;
+    font-weight:bold;
+    letter-spacing: 1px;
+    font-size: 0.8vw;
+    font-family: sans-serif;
+    font-style: italic;
+    cursor: pointer;
+    p{
+        margin: 5px 7px;
+        // margin-top: 10px;
+        box-sizing: border-box;
+        
+    }
+ 
+}
+.middle:hover::before {
+    content: '查看详情';
+    position: absolute;
+    top: 45px;
+    /* 根据需要调整位置 */
+    left: 10px;
+    width: 55px;
+    background-color: #fff;
+    /* 可选：背景色 */
+    padding: 5px;
+    /* 可选：内边距 */
+    border: 1px solid #ccc;
+    /* 可选：边框 */
+    border-radius: 4px;
+    /* 可选：边框圆角 */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    /* 可选：阴影 */
+    font-size: 12px;
+    /* 可选：字体大小 */
+    color: #333;
+    /* 可选：字体颜色 */
+}
+
 /deep/.el-date-editor {
     --el-date-editor-daterange-width: 185px;
 }
@@ -383,10 +448,10 @@ onUnmounted(() => {
     // height: 30px;
     // position: relative;
     position: absolute;
-    top: 0vh;
+    top: -0.1vh;
     
-    left: 14vw;
-    margin-left: 1vw;
+    left: 15vw;
+    // margin-left: 1vw;
     padding: 0px 8px;
 }
 </style>

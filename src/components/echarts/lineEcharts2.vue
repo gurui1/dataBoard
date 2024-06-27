@@ -50,7 +50,15 @@ let geiTime = () => {
 }
 const router = useRouter();
 let tiaozhuan = () => {
-    router.push('/biao1'); // 导航到 '/about' 路由
+    
+    if(props.title=='预计支出金额业务统计')
+    router.push('/biao3'); // 
+    if(props.title=='预计回款金额业务统计')
+    router.push('/biao4'); // 
+    if(props.title=='实际支出金额业务统计')
+    router.push('/biao5'); // 
+    if(props.title=='实际回款金额业务统计')
+    router.push('/biao6'); // 
 }
 const radio = ref(1)
 let myChart: any = null;
@@ -64,12 +72,7 @@ let echartX: any = ref(['消息类', '语音类', "证件/码号业务", "其他
 let echarty: any = ref([100, 200, 300, 400, 500, 600, 700]);
 let initEcharts = () => {
     for (let i = 0; i < 7; i++)
-        // {
-        //     let value = generateRecentDates()[i].slice(5, 11);
-        //     let lines = value.match(/.{1,5}/g);
-        //     let add = lines.join("\n");
-        //     echartX.value.push(add);
-        // }
+  
         if (first) {
             myChart = echarts.init(midEcharts6.value as any);
         }
@@ -94,8 +97,8 @@ let initEcharts = () => {
             grid: {
                 left: "4%",
                 right: "6%",
-                bottom: "0%",
-                top: "10%",
+                bottom: "5%",
+                top: "5%",
                 containLabel: true,
             },
             yAxis: [
@@ -196,10 +199,7 @@ let getData = () => {
     changeTime(timeLineVal.value[0], timeLineVal.value[1]);
     // console.log(timeLineVal.value[0], timeLineVal.value[1], '555');
     // console.log(radio.value);
-
-
     initEcharts();
-
 };
 
 onMounted(() => {
@@ -267,20 +267,14 @@ onUnmounted(() => {
 
 .title {
     color: black;
-    // font-size: 1.5vh;
-    font-size: 1.1vw;
+    font-size: 2.2vh;
     font-weight: bold;
     position: relative;
-    display: inline-block;
     height: 3vh;
     left: 3.3vw;
-
+    width: 12vw;
     top: 8px;
-    // left: 8px;
-    // 文字间距
     letter-spacing: 1px;
-
-
     border: 2px solid #4080D4;
     border-radius: 10px;
 

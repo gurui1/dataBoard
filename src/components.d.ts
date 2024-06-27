@@ -57,7 +57,7 @@ declare module 'vue' {
     LineEcharts2: typeof import('./components/echarts/lineEcharts2.vue')['default']
     LineEchartsL: typeof import('./components/echarts/lineEchartsL.vue')['default']
     One: typeof import('./components/Board/one.vue')['default']
-    Other: typeof import('./components/other.vue')['default']
+    Other: typeof import('./components/echarts/other.vue')['default']
     Pagination: typeof import('./components/Crud/Pagination.vue')['default']
     PaginationPrevNext: typeof import('./components/Crud/PaginationPrevNext.vue')['default']
     PieEcharts: typeof import('./components/echarts/pieEcharts.vue')['default']

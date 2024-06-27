@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import { useMain } from "@/store/home";
-
+import cookie from "js-cookie";
+import { log } from "console";
 // 2. 配置路由
 const routes: Array<RouteRecordRaw> = [
 
@@ -12,7 +13,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/main",
     name: "main",
-    redirect: "/dataBoard",
+    redirect: "/dataBoard", //main 重定向到 /dataBoard， 
     component: () => import("@/views/main.vue"),
     children: [
       {
@@ -58,7 +59,12 @@ const routes: Array<RouteRecordRaw> = [
       },
     ]
   },
- 
+  {
+    path: "/404",
+    name: "404",
+    component: () => import("@/views/404.vue"),
+  }
+
 ];
 // 1.返回一个 router 实列，为函数，里面有配置项（对象） history
 const router = createRouter({
@@ -66,27 +72,78 @@ const router = createRouter({
   routes,
 });
 
+function getCookieValue(cookieName) {
+  const name = cookieName + "=";
+  const decodedCookie = decodeURIComponent(document.cookie);
+  const cookieArray = decodedCookie.split(';');
 
-//路由拦截
-router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem("token")
-  if (to.path == "/") {
-    next({ path: "/main" });
+  for (let i = 0; i < cookieArray.length; i++) {
+    let cookie = cookieArray[i].trim();
+    if (cookie.indexOf(name) === 0) {
+      return cookie.substring(name.length, cookie.length);
+    }
   }
-  next()
-  // if (token) {
-  //   if (to.path == "/login") {
-  //     next({ path: "/"+ useMain().cebianName.split("|")[0] });
-  //   } else {
-  //     next();
-  //   }
-  // } else {
-  //   if (to.path != "/login") {
-  //     next({ path: "/login" });
-  //   } else {
-  //     next();
-  //   }
-  // }
-})
+  return "";
+}
+// cookie.set("token", 111);
+// const token = cookie.get("token");
+// console.log(token, 'cookie');
+// localStorage.setItem("token1", '1112');
+// console.log(localStorage.getItem("token1"), 'localStorage');
+
+
+
+// const jsessionid = getCookieValue('JSESSIONID');
+// console.log(jsessionid, 'cookie');
+
+const urlParams = new URLSearchParams(window.location.search);
+const token = urlParams.get('token');
+console.log(token, '超链接');
+if (token) {
+  // 设置 token
+  console.log(11112112);
+
+  localStorage.setItem('token', token);
+  // 设置过期时间为 30 分钟后的时间戳（单位为毫秒）
+  const now = new Date();
+  const Overtime: any = now.getTime() + 30 * 60 * 1000; // 30 minutes
+  localStorage.setItem('tokenOvertime', Overtime);
+}
+
+// 路由拦截
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token');
+  const tokenOvertime: any = localStorage.getItem('tokenOvertime');
+  const now = new Date().getTime();
+  // console.log(now, 'now');
+  // console.log(tokenOvertime, 'tokenOvertime');
+
+  //如果超时 跳到404 
+  if (now > tokenOvertime) {
+    
+    next({ path: "/404" });
+    localStorage.removeItem('token');
+    // console.log(token);
+
+  } else if (to.path === "/") {
+      if (!token) {
+        next({ path: "/404" }); // 没有token，重定向到404页面
+      } else {
+        next({ path: "/main" }); // 有token，重定向到/main页面
+      }
+    } else if (to.path === "/dataBoard" || to.path.startsWith("/biao")) {
+      // 正常跳转到数据看板或其他以 /biao 开头的路径
+      if (!token) {
+        next({ path: "/404" });
+      }
+      next();
+    }
+    next();
+
+
+
+
+
+});
 // 3导出路由   然后去 main.ts 注册 router.ts
 export default router

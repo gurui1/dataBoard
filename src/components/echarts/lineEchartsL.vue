@@ -38,6 +38,7 @@ let timeLineVal: any = ref([]);
 let geiTime = () => {
     timeLineVal.value[0] = localStorage.getItem('mouthFirstDay');
     timeLineVal.value[1] = localStorage.getItem('now');
+    // console.log(timeLineVal.value);
 }
 const router = useRouter();
 let tiaozhuan = () => {
@@ -66,7 +67,9 @@ let echarty1: any = ref([100, 200, 300, 400, 500, 600, 700]);
 let echarty2: any = ref([150, 250, 350, 450, 550, 650, 750]);
 let echarty3: any = ref([200, 300, 400, 500, 600, 700, 800]);
 let initEcharts = () => {
+  echartX.value = [];
   for (let i = 0; i < 7; i++) {
+   
     let value = generateRecentDates()[i].slice(5, 11);
     let lines = value.match(/.{1,5}/g);
     let add = lines.join("\n");
